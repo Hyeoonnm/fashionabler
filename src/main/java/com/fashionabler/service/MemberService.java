@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface MemberService {
     int signup(Member member);
-
     List<Member> memberList();
 }
