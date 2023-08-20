@@ -7,4 +7,9 @@
         SELECT *
         FROM member;
     </select>
+
+    <insert id="signup" parameterType="com.fashionabler.model.Member">
+        INSERT INTO member
+        values (#{memberId}, #{memberPasswords},#{memberEmail}, #{memberPhone})
+    </insert>
 </mapper>

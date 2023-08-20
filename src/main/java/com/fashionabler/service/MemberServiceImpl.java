@@ -1,8 +1,10 @@
 package com.fashionabler.service;
 
-import com.fashionabler.mapper.MemberMapper;
+import com.fashionabler.dao.MemberDao;
 import com.fashionabler.model.Member;
+import com.fashionabler.util.Encorder;
 import lombok.RequiredArgsConstructor;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,10 +13,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService{
 
-    private final MemberMapper memberMapper;
+    private final MemberDao memberDao;
+
+    @Override
+    public int signup(Member member) {
+
+        return memberDao.signup(member);
+    }
 
     @Override
     public List<Member> memberList() {
-        return memberMapper.memberList();
+        return memberDao.memberList();
     }
 }
