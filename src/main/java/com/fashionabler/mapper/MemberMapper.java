@@ -7,5 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface MemberMapper {
+    int signup(Member member);
+
     List<Member> memberList();
 }
