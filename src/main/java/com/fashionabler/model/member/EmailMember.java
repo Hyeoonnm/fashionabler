@@ -1,4 +1,4 @@
-package com.fashionabler.model;
+package com.fashionabler.model.member;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.AllArgsConstructor;
@@ -13,5 +13,6 @@ import lombok.Setter;
 @JsonAutoDetect
 public class EmailMember {
     private String memberEmail;
+    private String authCode;
 
 }

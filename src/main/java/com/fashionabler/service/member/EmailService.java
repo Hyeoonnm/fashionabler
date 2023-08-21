@@ -1,4 +1,4 @@
-package com.fashionabler.service;
+package com.fashionabler.service.member;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

@@ -1,10 +1,8 @@
-package com.fashionabler.service;
+package com.fashionabler.service.member;
 
-import com.fashionabler.dao.MemberDao;
-import com.fashionabler.model.Member;
-import com.fashionabler.util.Encorder;
+import com.fashionabler.dao.member.MemberDao;
+import com.fashionabler.model.member.Member;
 import lombok.RequiredArgsConstructor;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

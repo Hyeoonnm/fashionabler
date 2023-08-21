@@ -1,6 +1,6 @@
-package com.fashionabler.service;
+package com.fashionabler.service.member;
 
-import com.fashionabler.model.Member;
+import com.fashionabler.model.member.Member;
 
 import java.util.List;
 
