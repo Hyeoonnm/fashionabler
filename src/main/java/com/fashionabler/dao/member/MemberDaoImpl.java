@@ -1,7 +1,7 @@
-package com.fashionabler.dao;
+package com.fashionabler.dao.member;
 
-import com.fashionabler.mapper.MemberMapper;
-import com.fashionabler.model.Member;
+import com.fashionabler.mapper.member.MemberMapper;
+import com.fashionabler.model.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

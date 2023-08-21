@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fashionabler.mapper.member.ConfirmMemberMapper">
+    <select id="findByEmail" resultType="Integer">
+        SELECT COUNT(member_email)
+        FROM confirm_member
+        where member_email = #{memberEmail};
+    </select>
+
+    <select id="checkEmail" resultType="Integer">
+        SELECT COUNT(*)
+        FROM confirm_member
+        WHERE member_email = #{memberEmail}
+          AND auth_code = #{authCode}
+    </select>
+
+    <insert id="save" parameterType="com.fashionabler.model.member.EmailMember">
+        INSERT INTO confirm_member
+        values (#{memberEmail}, #{authCode})
+    </insert>
+
+    <update id="update" parameterType="com.fashionabler.model.member.EmailMember">
+        UPDATE confirm_member
+        SET member_email = #{memberEmail},
+            auth_code    = #{authCode}
+        WHERE member_email = #{memberEmail}
+    </update>
+
+    <delete id="deleteEmail">
+        DELETE
+        FROM confirm_member
+        WHERE member_email = #{memberEmail}
+    </delete>
+</mapper>

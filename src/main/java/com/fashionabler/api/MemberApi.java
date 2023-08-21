@@ -1,9 +1,10 @@
 package com.fashionabler.api;
 
-import com.fashionabler.model.EmailMember;
-import com.fashionabler.model.Member;
-import com.fashionabler.service.EmailService;
-import com.fashionabler.service.MemberService;
+import com.fashionabler.model.member.EmailMember;
+import com.fashionabler.model.member.Member;
+import com.fashionabler.service.member.ConfirmMemberService;
+import com.fashionabler.service.member.EmailService;
+import com.fashionabler.service.member.MemberService;
 import com.fashionabler.util.Encorder;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +24,30 @@ import java.util.List;
 public class MemberApi {
 
     private final MemberService memberService;
-
     private final EmailService emailService;
+    private final ConfirmMemberService confirmMemberService;
 
-    @PostMapping(value = "/sendEmail", produces = MediaType.TEXT_PLAIN_VALUE)
-    public String mailConfirm(@RequestBody EmailMember emailMember) throws MessagingException, UnsupportedEncodingException {
-        String authCode = emailService.sendEmail(emailMember.getMemberEmail());
-        return authCode;
+    @PostMapping(value = "/sendEmail")
+    public int mailConfirm(@RequestBody EmailMember emailMember) throws MessagingException, UnsupportedEncodingException {
+        String emailCode = emailService.sendEmail(emailMember.getMemberEmail());
+        emailMember.setAuthCode(emailCode);
+        // TODO return save에 따른 값으로 변경
+        // 사용자 eamil 정보 , 인증번호 정보 db에 저장
+        confirmMemberService.save(emailMember);
+        return 1;
+    }
+
+    @PostMapping("/checkEmail")
+    public int checkEmail(@RequestBody EmailMember emailMember) {
+        int confirmInt = confirmMemberService.checkEmail(emailMember);
+        if (confirmInt == 1) {
+            // 인증번호 인증 완료시 해당 db정보 삭제
+            confirmMemberService.deleteEmail(emailMember.getMemberEmail());
+            // 성공
+            return 1;
+        }
+        // 실패
+        else return 0;
     }
 
     /**
@@ -47,6 +65,7 @@ public class MemberApi {
         }
 
         // 비밀번호 암호화
+        // TODO 암호 복호화 작업 해야함
         String passwordSecurity = Encorder.hashpw(member.getMemberPasswords(), BCrypt.gensalt());
         member.setMemberPasswords(passwordSecurity);
 

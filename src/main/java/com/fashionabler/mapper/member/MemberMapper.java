@@ -1,6 +1,6 @@
-package com.fashionabler.mapper;
+package com.fashionabler.mapper.member;
 
-import com.fashionabler.model.Member;
+import com.fashionabler.model.member.Member;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

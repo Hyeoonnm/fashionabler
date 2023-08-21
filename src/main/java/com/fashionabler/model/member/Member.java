@@ -1,4 +1,4 @@
-package com.fashionabler.model;
+package com.fashionabler.model.member;
 
 import lombok.Getter;
 import lombok.Setter;

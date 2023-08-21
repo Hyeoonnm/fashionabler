@@ -1,6 +1,6 @@
-package com.fashionabler.dao;
+package com.fashionabler.dao.member;
 
-import com.fashionabler.model.Member;
+import com.fashionabler.model.member.Member;
 
 import java.util.List;
 
