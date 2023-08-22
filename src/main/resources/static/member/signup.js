@@ -1,4 +1,3 @@
-
 // 이메일 전송 fetch
 document.getElementById("sendEmail").onclick = function () {
     const inputVal = document.querySelector("input[name='memberEmail']").value;
@@ -50,15 +49,32 @@ document.getElementById("signupBtn").onclick = function () {
     })
         .then((response) => response.json())
         .then((data) => {
-            if (data === 1) {
-                alert("회원가입 성공")
-                window.location.href = "/"
-            } else if (data === 0) {
-                alert("중복된 아이디입니다.");
-            } else if (data === 2) {
-                alert("비밀번호 8자리 이상 입력해주세요.");
-            } else if (data === 3) {
-                alert("이메일을 형식에 맞게 작성하세요");
+            console.log(data);
+            if (data.hasOwnProperty('valid_memberId')) {
+                $('#valid_memberId').text(data.valid_memberId);
+                $('#valid_memberId').css('color', 'red');
+            } else $('#valid_memberId').text('');
+
+            if (data.hasOwnProperty('valid_memberPasswords')) {
+                $('#valid_memberPasswords').text(data.valid_memberPasswords);
+                $('#valid_memberPasswords').css('color', 'red');
+            } else $('#valid_memberPasswords').text('');
+
+            if (data.hasOwnProperty('valid_memberPhone')) {
+                $('#valid_memberPhone').text(data.valid_memberPhone);
+                $('#valid_memberPhone').css('color', 'red');
+            } else $('#valid_memberPhone').text('');
+
+            if (data.hasOwnProperty('valid_memberEmail')) {
+                $('#valid_memberEmail').text(data.valid_memberEmail);
+                $('#valid_memberEmail').css('color', 'red');
+            } else $('#valid_memberEmail').text('');
+
+            if (data.hasOwnProperty('dupl')) {
+                alert(data.dupl);
+            }
+            if (data.hasOwnProperty('signup')) {
+                alert(data.signup);
             }
         })
         .catch((error) => console.log(error));
@@ -96,4 +112,9 @@ function CheckEmail(str) {
     } else {
         return true;
     }
+}
+const autoHyphen = (target) => {
+    target.value = target.value
+        .replace(/[^0-9]/g, '')
+        .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
 }

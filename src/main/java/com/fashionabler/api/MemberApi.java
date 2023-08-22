@@ -6,17 +6,27 @@ import com.fashionabler.service.member.ConfirmMemberService;
 import com.fashionabler.service.member.EmailService;
 import com.fashionabler.service.member.MemberService;
 import com.fashionabler.util.Encorder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.json.JSONParser;
 import org.mindrot.jbcrypt.BCrypt;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/memberApi")
@@ -52,16 +62,13 @@ public class MemberApi {
 
     /**
      * @param member
-     * @return 0 회원가입 실패 / 1 회원가입 성공 / 2 비밀번호 8자리 이상 / 3 이메일 형식
+     * @return
      */
     @PostMapping("/signup")
-    public int signup(@RequestBody Member member) {
-
-        if (member.getMemberPasswords().length() < 8) {
-            return 2;
-        }
-        if (!member.getMemberEmail().contains("@")) {
-            return 3;
+    public ResponseEntity<?> signup(@RequestBody @Valid Member member, BindingResult errors) throws JsonProcessingException {
+        if (errors.hasErrors()) {
+            Map<String, String> errorsMap = memberService.validateHandling(errors);
+            return ResponseEntity.badRequest().body(errorsMap);
         }
 
         // 비밀번호 암호화
@@ -70,12 +77,17 @@ public class MemberApi {
         member.setMemberPasswords(passwordSecurity);
 
         List<Member> memberList = memberService.memberList();
-        for (Member duplMember :
-                memberList) {
+        for (Member duplMember : memberList) {
             if (member.getMemberId().equals(duplMember.getMemberId())) {
-                return 0;
+                Map<String, String> duplMap = new HashMap<>();
+                duplMap.put("dupl", "중복된 아이디입니다.");
+                return ResponseEntity.badRequest().body(duplMap);
             }
         }
-        return memberService.signup(member);
+
+        memberService.signup(member);
+        Map<String, String> singupMap = new HashMap<>();
+        singupMap.put("signup", "회원가입 성공");
+        return ResponseEntity.ok(singupMap);
     }
 }
