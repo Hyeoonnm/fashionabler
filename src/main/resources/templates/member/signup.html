@@ -6,36 +6,42 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-<label>
-    아이디
-    <input id="memberId" name="memberId">
-</label>
 
-<label>
-    비밀번호
-    <input id="memberPasswords" name="memberPasswords">
-</label>
+<div class="container">
+    <div class="form-group">
+        <label for="memberId">memberId</label> <input name="memberId" type="text" class="form-control"
+                                                      placeholder="Enter memberId" id="memberId">
+    </div>
+    <p id="valid_memberId"></p>
 
-<label>
-    메일
-    <input id="memberEmail" name="memberEmail">
-</label>
+    <div class="form-group">
+        <label for="memberPasswords">Password</label> <input type="password" name="memberPasswords" class="form-control"
+                                                             placeholder="Enter Password" id="memberPasswords">
+    </div>
+    <p id="valid_memberPasswords"></p>
 
-<button id="sendEmail" type="button">이메일 발송</button>
+    <div class="form-group">
+        <label for="memberPhone">Phone</label> <input type="tel" name="memberPhone" class="form-control"
+                                                      placeholder="Enter Phone" id="memberPhone"
+                                                      oninput="autoHyphen(this)" maxlength="13">
+    </div>
+    <p id="valid_memberPhone"></p>
 
-<label>
-    인증번호
-    <input id="authCode" name="authCode">
-</label>
+    <div class="form-group">
+        <label for="memberEmail">Email address</label> <input type="email" name="memberEmail" class="form-control"
+                                                              placeholder="Enter email" id="memberEmail">
+        <button id="sendEmail" type="button">Send Email</button>
+    </div>
+    <p id="valid_memberEmail"></p>
 
-<button id="confirmEmail" type="button">인증하기</button>
+    <div class="form-group">
+        <label for="authCode">Code</label> <input type="email" name="authCode" class="form-control"
+                                                  placeholder="Enter Code" id="authCode">
+        <button id="confirmEmail" type="button">Confirm</button>
+    </div>
 
-<label>
-    전화번호
-    <input id="memberPhone" name="memberPhone">
-</label>
-<button id="check" type="button">check</button>
-<button id="signupBtn" type="button">submit</button>
+    <button id="signupBtn" type="button" class="btn btn-primary">Join</button>
+</div>
 </body>
 <script src="/member/signup.js"></script>
 </html>
