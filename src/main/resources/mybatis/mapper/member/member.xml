@@ -10,6 +10,6 @@
 
     <insert id="signup" parameterType="com.fashionabler.model.member.Member">
         INSERT INTO member
-        values (#{memberId}, #{memberPasswords},#{memberEmail}, #{memberPhone})
+        values (#{memberId}, #{memberPasswords}, #{memberEmail}, #{memberPhone})
     </insert>
 </mapper>

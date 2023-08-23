@@ -18,7 +18,7 @@
 
     <insert id="save" parameterType="com.fashionabler.model.member.EmailMember">
         INSERT INTO confirm_member
-        values (#{memberEmail}, #{authCode})
+        values (#{memberEmail}, #{authCode}, 0)
     </insert>
 
     <update id="update" parameterType="com.fashionabler.model.member.EmailMember">
@@ -28,9 +28,21 @@
         WHERE member_email = #{memberEmail}
     </update>
 
+    <update id="confirmEmail" parameterType="com.fashionabler.model.member.EmailMember">
+        UPDATE confirm_member
+        SET member_confirm_email = 1
+        WHERE member_email = #{memberEmail}
+    </update>
+
     <delete id="deleteEmail">
         DELETE
         FROM confirm_member
         WHERE member_email = #{memberEmail}
     </delete>
+
+    <select id="checkConfirmMember" resultType="Integer">
+        SELECT member_confirm_email
+        FROM confirm_member
+        WHERE member_email = #{memberEmail}
+    </select>
 </mapper>

@@ -1,11 +1,6 @@
 // 이메일 전송 fetch
 document.getElementById("sendEmail").onclick = function () {
     const inputVal = document.querySelector("input[name='memberEmail']").value;
-
-    if (!CheckEmail(inputVal)) {
-        return alert("정확한 이메일 형식을 작성해주세요.")
-    }
-
     const data = {
         memberEmail: inputVal,
     }
@@ -16,15 +11,20 @@ document.getElementById("sendEmail").onclick = function () {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data === 1) {
-                alert("인증번호를 전송하였습니다.");
-            }
-        })
-        .catch((error) => console.log(error));
-};
+    }).then((response) => {
+        if (response.ok) {
+            alert("인증번호를 전송하였습니다.")
+            document.getElementById('valid_memberEmail').textContent = ''
+        }
+    else
+        response.json().then((data) => {
+            if (data.hasOwnProperty('valid_memberEmail')) {
+                $('#valid_memberEmail').text(data.valid_memberEmail);
+                $('#valid_memberEmail').css('color', 'red');
+            } else $('#valid_memberEmail').text('');
+        }).catch((error) => console.log(error));
+    });
+}
 
 // 회원가입 fetch
 document.getElementById("signupBtn").onclick = function () {
@@ -47,35 +47,40 @@ document.getElementById("signupBtn").onclick = function () {
         },
         body: JSON.stringify(data),
     })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log(data);
-            if (data.hasOwnProperty('valid_memberId')) {
-                $('#valid_memberId').text(data.valid_memberId);
-                $('#valid_memberId').css('color', 'red');
-            } else $('#valid_memberId').text('');
+        .then((response) => {
+            if (response.ok) {
+                alert("회원 가입 완료")
+                // window.location.href = "/";
+            } else
+                response.json()
+                    .then(data => {
+                        if (data.hasOwnProperty('valid_memberId')) {
+                            $('#valid_memberId').text(data.valid_memberId);
+                            $('#valid_memberId').css('color', 'red');
+                        } else $('#valid_memberId').text('');
 
-            if (data.hasOwnProperty('valid_memberPasswords')) {
-                $('#valid_memberPasswords').text(data.valid_memberPasswords);
-                $('#valid_memberPasswords').css('color', 'red');
-            } else $('#valid_memberPasswords').text('');
+                        if (data.hasOwnProperty('valid_memberPasswords')) {
+                            $('#valid_memberPasswords').text(data.valid_memberPasswords);
+                            $('#valid_memberPasswords').css('color', 'red');
+                        } else $('#valid_memberPasswords').text('');
 
-            if (data.hasOwnProperty('valid_memberPhone')) {
-                $('#valid_memberPhone').text(data.valid_memberPhone);
-                $('#valid_memberPhone').css('color', 'red');
-            } else $('#valid_memberPhone').text('');
+                        if (data.hasOwnProperty('valid_memberPhone')) {
+                            $('#valid_memberPhone').text(data.valid_memberPhone);
+                            $('#valid_memberPhone').css('color', 'red');
+                        } else $('#valid_memberPhone').text('');
 
-            if (data.hasOwnProperty('valid_memberEmail')) {
-                $('#valid_memberEmail').text(data.valid_memberEmail);
-                $('#valid_memberEmail').css('color', 'red');
-            } else $('#valid_memberEmail').text('');
+                        if (data.hasOwnProperty('valid_memberEmail')) {
+                            $('#valid_memberEmail').text(data.valid_memberEmail);
+                            $('#valid_memberEmail').css('color', 'red');
+                        } else $('#valid_memberEmail').text('');
 
-            if (data.hasOwnProperty('dupl')) {
-                alert(data.dupl);
-            }
-            if (data.hasOwnProperty('signup')) {
-                alert(data.signup);
-            }
+                        if (data.hasOwnProperty('dupl')) {
+                            alert(data.dupl);
+                        }
+                        if (data.hasOwnProperty('confirm')) {
+                            alert(data.confirm);
+                        }
+                    })
         })
         .catch((error) => console.log(error));
 };
@@ -96,23 +101,19 @@ document.getElementById('confirmEmail').onclick = function () {
         },
         body: JSON.stringify(data),
     })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data === 1) {
-                alert("인증이 완료되었습니다.");
-            } else alert("다시 입력해주십시오");
-        })
-        .catch((error) => console.log(error));
+        .then((response) => {
+            if (response.ok) {
+                alert("이메일 인증 완료");
+            } else
+                response.json().then((data) => {
+                    if (data === 0) {
+                        alert("인증번호가 일치하지 않습니다.");
+                    }
+                });
+        }).catch((error) => console.log(error));
 };
 
-function CheckEmail(str) {
-    var reg_email = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
-    if (!reg_email.test(str)) {
-        return false;
-    } else {
-        return true;
-    }
-}
+
 const autoHyphen = (target) => {
     target.value = target.value
         .replace(/[^0-9]/g, '')
