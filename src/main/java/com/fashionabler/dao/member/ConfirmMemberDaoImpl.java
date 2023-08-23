@@ -34,4 +34,14 @@ public class ConfirmMemberDaoImpl implements ConfirmMemberDao{
     public void deleteEmail(String memberEmail) {
         confirmMemberMapper.deleteEmail(memberEmail);
     }
+
+    @Override
+    public void confirmEmail(String memberEmail) {
+        confirmMemberMapper.confirmEmail(memberEmail);
+    }
+
+    @Override
+    public int checkConfirmMember(String memberEmail) {
+        return confirmMemberMapper.checkConfirmMember(memberEmail);
+    }
 }

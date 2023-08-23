@@ -27,4 +27,14 @@ public class ConfirmMemberServiceImpl implements ConfirmMemberService{
     public void deleteEmail(String memberEmail) {
         confirmMemberDao.deleteEmail(memberEmail);
     }
+
+    @Override
+    public void confirmEmail(String memberEmail) {
+        confirmMemberDao.confirmEmail(memberEmail);
+    }
+
+    @Override
+    public int checkConfirmMember(String memberEmail) {
+        return confirmMemberDao.checkConfirmMember(memberEmail);
+    }
 }

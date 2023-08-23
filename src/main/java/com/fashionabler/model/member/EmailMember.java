@@ -18,7 +18,7 @@ public class EmailMember {
     @Email(message = "이메일 형식이 올바르지 않습니다.")
     @NotBlank(message = "이메일은 필수 입력 값입니다.")
     private String memberEmail;
-
     private String authCode;
+    private int memberConfirmEmail;
 
 }
