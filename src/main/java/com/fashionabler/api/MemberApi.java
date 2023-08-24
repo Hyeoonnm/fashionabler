@@ -5,12 +5,15 @@ import com.fashionabler.model.member.Member;
 import com.fashionabler.service.member.ConfirmMemberService;
 import com.fashionabler.service.member.EmailService;
 import com.fashionabler.service.member.MemberService;
+import com.fashionabler.util.RedisUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,9 +32,10 @@ public class MemberApi {
     private final MemberService memberService;
     private final EmailService emailService;
     private final ConfirmMemberService confirmMemberService;
+    private final RedisUtil redisUtil;
 
     @PostMapping(value = "/sendEmail")
-    public ResponseEntity<Map<String, String>> mailConfirm(@Valid @RequestBody EmailMember emailMember, BindingResult errors) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity<Map<String, String>> mailConfirm(@Valid @RequestBody EmailMember emailMember, BindingResult errors) throws MessagingException, UnsupportedEncodingException, Exception {
         if (errors.hasErrors()) {
             Map<String, String> errorsMap = memberService.validateHandling(errors);
             return ResponseEntity.badRequest().body(errorsMap);
@@ -41,7 +45,9 @@ public class MemberApi {
         emailMember.setAuthCode(emailCode);
         // TODO return save에 따른 값으로 변경
         // 사용자 eamil 정보 , 인증번호 정보 db에 저장
+
         confirmMemberService.save(emailMember);
+        redisUtil.setData(emailMember.getAuthCode(), emailMember.getMemberEmail(), 180000);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -67,6 +73,5 @@ public class MemberApi {
         if (signup.containsKey("dupl") || signup.containsKey("confirm") || signup.containsKey("correct")) {
             return ResponseEntity.badRequest().body(signup);
         } else return ResponseEntity.ok().build();
-
     }
 }
