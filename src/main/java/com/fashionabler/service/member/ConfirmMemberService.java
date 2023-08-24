@@ -7,9 +7,5 @@ public interface ConfirmMemberService {
 
     int checkEmail(EmailMember emailMember);
 
-    void deleteEmail(String memberEmail);
-
     void confirmEmail(String memberEmail);
-
-    int checkConfirmMember(String memberEmail);
 }

@@ -4,6 +4,7 @@ import com.fashionabler.dao.member.ConfirmMemberDao;
 import com.fashionabler.model.member.EmailMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -11,6 +12,7 @@ public class ConfirmMemberServiceImpl implements ConfirmMemberService{
     private final ConfirmMemberDao confirmMemberDao;
 
     @Override
+    @Transactional
     public void save(EmailMember emailMember) {
         int byEmail = confirmMemberDao.findByEmail(emailMember);
         if (byEmail == 0) {
@@ -24,17 +26,8 @@ public class ConfirmMemberServiceImpl implements ConfirmMemberService{
     }
 
     @Override
-    public void deleteEmail(String memberEmail) {
-        confirmMemberDao.deleteEmail(memberEmail);
-    }
-
-    @Override
     public void confirmEmail(String memberEmail) {
         confirmMemberDao.confirmEmail(memberEmail);
     }
 
-    @Override
-    public int checkConfirmMember(String memberEmail) {
-        return confirmMemberDao.checkConfirmMember(memberEmail);
-    }
 }
