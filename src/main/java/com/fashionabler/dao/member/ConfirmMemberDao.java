@@ -15,5 +15,5 @@ public interface ConfirmMemberDao {
 
     void confirmEmail(String memberEmail);
 
-    int checkConfirmMember(String memberEmail);
+    Integer checkConfirmMember(String memberEmail);
 }

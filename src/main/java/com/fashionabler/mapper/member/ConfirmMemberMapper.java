@@ -17,5 +17,5 @@ public interface ConfirmMemberMapper {
 
     void confirmEmail(String memberEmail);
 
-    int checkConfirmMember(String memberEmail);
+    Integer checkConfirmMember(String memberEmail);
 }

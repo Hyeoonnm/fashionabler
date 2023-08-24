@@ -63,22 +63,10 @@ public class MemberApi {
             Map<String, String> errorsMap = memberService.validateHandling(errors);
             return ResponseEntity.badRequest().body(errorsMap);
         }
-
-        int signup = memberService.signup(member);
-        if (signup == 2) {
-            Map<String, String> duplMap = new HashMap<>();
-            duplMap.put("dupl", "중복된 아이디입니다.");
-            return ResponseEntity.badRequest().body(duplMap);
-        }
-
-        if (confirmMemberService.checkConfirmMember(member.getMemberEmail()) == 1) {
-            confirmMemberService.deleteEmail(member.getMemberEmail());
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            Map<String, String> nonConfirm = new HashMap<>();
-            nonConfirm.put("confirm", "인증번호를 입력하셔야 합니다.");
-            return ResponseEntity.badRequest().body(nonConfirm);
-        }
+        Map<String, String> signup = memberService.signup(member);
+        if (signup.containsKey("dupl") || signup.containsKey("confirm") || signup.containsKey("correct")) {
+            return ResponseEntity.badRequest().body(signup);
+        } else return ResponseEntity.ok().build();
 
     }
 }

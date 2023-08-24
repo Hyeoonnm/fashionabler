@@ -32,13 +32,14 @@ document.getElementById("signupBtn").onclick = function () {
     const memberPasswords = document.querySelector("input[name='memberPasswords']").value;
     const memberEmail = document.querySelector("input[name='memberEmail']").value;
     const memberPhone = document.querySelector("input[name='memberPhone']").value;
+    const authCode = document.querySelector("input[name='authCode']").value;
 
     const data = {
         memberId: memberId,
         memberPasswords: memberPasswords,
         memberEmail: memberEmail,
         memberPhone: memberPhone
-    }
+    };
 
     fetch("../memberApi/signup", {
         method: "POST",
@@ -74,11 +75,21 @@ document.getElementById("signupBtn").onclick = function () {
                             $('#valid_memberEmail').css('color', 'red');
                         } else $('#valid_memberEmail').text('');
 
+                        if (authCode === '') {
+                            $('#valid_authCode').text("인증번호를 입력해주세요.");
+                            $('#valid_authCode').css('color', 'red');
+                            return;
+                        } else $('#valid_authCode').text('');
+
                         if (data.hasOwnProperty('dupl')) {
                             alert(data.dupl);
                         }
                         if (data.hasOwnProperty('confirm')) {
                             alert(data.confirm);
+                        }
+
+                        if (data.hasOwnProperty('correct')) {
+                            alert(data.correct);
                         }
                     })
         })

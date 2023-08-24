@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface MemberService {
-    int signup(Member member);
+    Map<String, String> signup(Member member);
     List<Member> memberList();
 
     Map<String, String> validateHandling(BindingResult errors);

@@ -41,7 +41,7 @@ public class ConfirmMemberDaoImpl implements ConfirmMemberDao{
     }
 
     @Override
-    public int checkConfirmMember(String memberEmail) {
+    public Integer checkConfirmMember(String memberEmail) {
         return confirmMemberMapper.checkConfirmMember(memberEmail);
     }
 }
