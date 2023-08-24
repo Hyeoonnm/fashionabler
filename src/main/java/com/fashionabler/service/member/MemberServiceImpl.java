@@ -31,7 +31,7 @@ public class MemberServiceImpl implements MemberService {
         String passwordSecurity = Encorder.hashpw(member.getMemberPasswords(), BCrypt.gensalt());
         member.setMemberPasswords(passwordSecurity);
 
-        // 중복 회원 검사
+        // 중복 회원 검사 -> method
         List<Member> memberList = memberList();
         for (Member duplMember : memberList) {
             if (member.getMemberId().equals(duplMember.getMemberId())) {
@@ -40,8 +40,8 @@ public class MemberServiceImpl implements MemberService {
                 return duplMap;
             }
         }
-
-        // 이메일 인증번호 유효성 검사
+        
+        // 이메일 인증번호 유효성 검사 -> method
         if (confirmMemberDao.checkConfirmMember(member.getMemberEmail()) == null) {
             Map<String, String> nonConfirm = new HashMap<>();
             nonConfirm.put("confirm", "인증번호를 입력하셔야 합니다.");
