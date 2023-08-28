@@ -32,7 +32,6 @@ public class MemberApi {
     private final MemberService memberService;
     private final EmailService emailService;
     private final ConfirmMemberService confirmMemberService;
-    private final RedisUtil redisUtil;
 
     @PostMapping(value = "/sendEmail")
     public ResponseEntity<Map<String, String>> mailConfirm(@Valid @RequestBody EmailMember emailMember, BindingResult errors) throws MessagingException, UnsupportedEncodingException, Exception {
@@ -43,24 +42,23 @@ public class MemberApi {
 
         String emailCode = emailService.sendEmail(emailMember.getMemberEmail());
         emailMember.setAuthCode(emailCode);
-        // TODO return save에 따른 값으로 변경
-        // 사용자 eamil 정보 , 인증번호 정보 db에 저장
 
-        confirmMemberService.save(emailMember);
-        redisUtil.setData(emailMember.getAuthCode(), emailMember.getMemberEmail(), 180000);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        Map<String, String> redisSave = confirmMemberService.save(emailMember);
+        if (redisSave.containsKey("RedisKeyAlready")) {
+            return ResponseEntity.badRequest().body(redisSave);
+        } else return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/checkEmail")
-    public ResponseEntity<Integer> checkEmail(@RequestBody EmailMember emailMember) {
-        int confirmInt = confirmMemberService.checkEmail(emailMember);
-        if (confirmInt == 1) {
-            confirmMemberService.confirmEmail(emailMember.getMemberEmail());
-            // 성공
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        // 실패
-        else return ResponseEntity.badRequest().body(0);
+    public ResponseEntity<Map<String, String>> checkEmail(@RequestBody EmailMember emailMember) {
+
+        Map<String, String> map = confirmMemberService.checkAuthCode(emailMember);
+        HttpStatus httpStatus;
+        if (map.containsKey("emailCheck")) {
+            httpStatus = HttpStatus.OK;
+        } else httpStatus = HttpStatus.BAD_REQUEST;
+
+        return ResponseEntity.status(httpStatus).body(map);
     }
 
     @PostMapping("/signup")

@@ -22,6 +22,10 @@ document.getElementById("sendEmail").onclick = function () {
                 $('#valid_memberEmail').text(data.valid_memberEmail);
                 $('#valid_memberEmail').css('color', 'red');
             } else $('#valid_memberEmail').text('');
+
+            if (data.hasOwnProperty("RedisKeyAlready")) {
+                alert(data.RedisKeyAlready);
+            }
         }).catch((error) => console.log(error));
     });
 }
@@ -117,8 +121,8 @@ document.getElementById('confirmEmail').onclick = function () {
                 alert("이메일 인증 완료");
             } else
                 response.json().then((data) => {
-                    if (data === 0) {
-                        alert("인증번호가 일치하지 않습니다.");
+                    if (data.hasOwnProperty("emailFail")) {
+                        alert(data.emailFail);
                     }
                 });
         }).catch((error) => console.log(error));

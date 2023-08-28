@@ -21,6 +21,8 @@ import java.util.Map;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberDao memberDao;
+
+    // TODO Redis로 변경하기
     private final ConfirmMemberDao confirmMemberDao;
 
     @Override
