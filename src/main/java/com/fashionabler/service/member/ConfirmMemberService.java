@@ -2,10 +2,10 @@ package com.fashionabler.service.member;
 
 import com.fashionabler.model.member.EmailMember;
 
+import java.util.Map;
+
 public interface ConfirmMemberService {
-    void save(EmailMember emailMember);
+    Map<String, String> save(EmailMember emailMember);
 
-    int checkEmail(EmailMember emailMember);
-
-    void confirmEmail(String memberEmail);
+    Map<String, String> checkAuthCode(EmailMember emailMember);
 }
